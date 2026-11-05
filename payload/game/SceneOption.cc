@@ -11,6 +11,7 @@
 
 #include <jsystem/J2DAnmLoaderDataBase.hh>
 #include <jsystem/J2DPicture.hh>
+#include <portable/Log.hh>
 
 extern "C" {
 #include <stdio.h>
@@ -320,10 +321,11 @@ void SceneOption::calc() {
     const char *itemsValueNames[] = {"Standard", "Smash", "Super", "Simple"};
     refreshOption(Option::Items, itemsValueNames);
     refreshOption(Option::Laps, static_cast<s8>(0));
-    refreshOption(Option::P1RearView, "XYLR");
-    refreshOption(Option::P2RearView, "XYLR");
-    refreshOption(Option::P3RearView, "XYLR");
-    refreshOption(Option::P4RearView, "XYLR");
+    const char *rearViewButtonNames[] = {"XBut", "YBut", "LBut", "RBut", "DLeft", "DRight", "DDown", "DUp"};
+    refreshOption(Option::P1RearView, rearViewButtonNames);
+    refreshOption(Option::P2RearView, rearViewButtonNames);
+    refreshOption(Option::P3RearView, rearViewButtonNames);
+    refreshOption(Option::P4RearView, rearViewButtonNames);
     const char *aspectRatioValueNames[] = {"Auto", "43", "1914", "32", "1610", "169", "3821",
             "219"};
     refreshOption(Option::AspectRatio, aspectRatioValueNames);
@@ -528,7 +530,7 @@ void SceneOption::readOptions() {
     }
     m_savedValues[Option::Laps] = systemRecord.m_vsLapNum;
     for (u32 i = 0; i < 4; i++) {
-        m_savedValues[Option::P1RearView + i] = (systemRecord.m_rearViewButtons >> (2 * i)) % 4;
+        m_savedValues[Option::P1RearView + i] = (systemRecord.m_rearViewButtons >> (3 * i)) % 8;
     }
     m_savedValues[Option::AspectRatio] = systemRecord.m_aspectRatio;
 
@@ -553,7 +555,7 @@ void SceneOption::writeOptions() {
     }
     systemRecord.m_rearViewButtons = 0;
     for (u32 i = 0; i < 4; i++) {
-        systemRecord.m_rearViewButtons |= m_unsavedValues[Option::P1RearView + i] << (2 * i);
+        systemRecord.m_rearViewButtons |= m_unsavedValues[Option::P1RearView + i] << (3 * i);
     }
     systemRecord.m_aspectRatio = m_unsavedValues[Option::AspectRatio];
 
@@ -661,6 +663,6 @@ void SceneOption::hideArrows() {
     }
 }
 
-const u32 SceneOption::ValueCounts[Option::Count] = {3, 21, 2, 2, 4, 10, 4, 4, 4, 4, 8};
+const u32 SceneOption::ValueCounts[Option::Count] = {3, 21, 2, 2, 4, 10, 8, 8, 8, 8, 8};
 const char *const SceneOption::EntryNames[Entry::Count] = {"Sd", "BGM", "Rm", "Gh", "Is", "Lp",
         "Re1", "Re2", "Re3", "Re4", "As", "ReTtl"};
