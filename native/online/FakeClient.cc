@@ -33,6 +33,11 @@ bool FakeClient::clientStateIdle(const ClientStateIdleReadInfo & /* readInfo */)
     return true;
 }
 
+bool FakeClient::clientStateNetwork(const ClientStateNetworkReadInfo & /* readInfo */) {
+    m_writer = &FakeClient::writeStateServer;
+    return true;
+}
+
 bool FakeClient::clientStateServer(const ClientStateServerReadInfo &readInfo) {
     const ClientStateServerReadInfo::Server &server = readInfo.servers[0];
     if (server.motd) {

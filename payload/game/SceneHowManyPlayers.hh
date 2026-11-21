@@ -5,7 +5,9 @@
 #include <jsystem/J2DScreen.hh>
 #include <portable/Array.hh>
 
-class SceneHowManyPlayers : public Scene {
+class SceneHowManyPlayers
+    : public Scene
+    , private ClientReadHandler {
 public:
     SceneHowManyPlayers(JKRArchive *archive, JKRHeap *heap);
     ~SceneHowManyPlayers() override;

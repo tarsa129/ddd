@@ -10,6 +10,7 @@
 #include "game/System.hh"
 
 #include <jsystem/J2DAnmLoaderDataBase.hh>
+#include <CubeClient.hh>
 
 SceneHowManyPlayers::SceneHowManyPlayers(JKRArchive *archive, JKRHeap *heap)
     : Scene(archive, heap) {
@@ -81,6 +82,9 @@ void SceneHowManyPlayers::draw() {
 }
 
 void SceneHowManyPlayers::calc() {
+    CubeClient *client = CubeClient::Instance();
+    client->read(*this);
+
     (this->*m_state)();
 
     OnlineBackground::Instance()->calc();
@@ -116,6 +120,8 @@ void SceneHowManyPlayers::calc() {
     for (u32 i = 0; i < m_circleAnmTransforms.count(); i++) {
         m_circleAnmTransforms[i]->m_frame = m_circleAnmTransformFrames[i];
     }
+
+    client->write((ClientStateNetworkWriteInfo){});
 
     m_screen.animation();
 }

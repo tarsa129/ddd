@@ -32,6 +32,7 @@ private:
     typedef ClientState &(FakeClient::*Writer)();
 
     bool clientStateIdle(const ClientStateIdleReadInfo &readInfo) override;
+    bool clientStateNetwork(const ClientStateNetworkReadInfo &readInfo) override;
     bool clientStateServer(const ClientStateServerReadInfo &readInfo) override;
     bool clientStateUpdate(const ClientStateUpdateReadInfo &readInfo) override;
     bool clientStateMode(const ClientStateModeReadInfo &readInfo) override;
